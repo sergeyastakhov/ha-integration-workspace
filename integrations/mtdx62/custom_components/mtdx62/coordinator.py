@@ -11,8 +11,7 @@ from homeassistant.helpers import issue_registry as ir
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
 from homeassistant.util import dt as dt_util
 from modbus_connection import ModbusError
-
-from mtdx62 import DeviceStatus, Mtdx62Device, Readings
+from mtdx62_modbus_library import DeviceStatus, Mtdx62Device, Readings
 
 from .const import (
     DOMAIN,

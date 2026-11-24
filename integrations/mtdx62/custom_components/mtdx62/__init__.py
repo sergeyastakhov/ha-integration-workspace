@@ -6,8 +6,7 @@ from homeassistant.components.modbus import async_get_unit
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import Platform
 from homeassistant.core import HomeAssistant
-
-from mtdx62 import Mtdx62Device
+from mtdx62_modbus_library import Mtdx62Device
 
 from .const import CONF_UNIT_ID
 from .coordinator import Mtdx62Coordinator

@@ -36,6 +36,8 @@ jobs:
           pip install -r requirements_test.txt
       - name: Ruff format
         run: ruff format --check .
+      - name: Library import (module naming)
+        run: python -c "import mtdx62_modbus_library; print(mtdx62_modbus_library.__version__)"
       - name: Ruff check
         run: ruff check .
       - name: mypy

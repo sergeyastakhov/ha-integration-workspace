@@ -97,6 +97,7 @@ the integration leaves the device exactly as it was.
 
 ## Development
 
-The protocol lives in a separate package, [`mtdx62`](https://pypi.org/project/mtdx62/), built on
+The protocol lives in a separate package, [`mtdx62-modbus-library`](https://pypi.org/project/mtdx62-modbus-library/),
+imported as `mtdx62_modbus_library`, built on
 Home Assistant's `modbus-connection`. The integration only wires that package to entities and the
 config flow; requirements and design live in `openspec/`.

@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from modbus_connection.mock import MockModbusUnit
 
-from mtdx62 import Mtdx62Device
+from mtdx62_modbus_library import Mtdx62Device
 
 
 async def test_reads_settings(mock_modbus_unit: MockModbusUnit) -> None:

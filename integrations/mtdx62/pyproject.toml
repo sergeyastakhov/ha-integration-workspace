@@ -27,10 +27,6 @@ select = ["A", "B", "E", "F", "I", "N", "RUF", "SIM", "UP"]
 python_version = "3.14"
 strict = true
 files = ["custom_components"]
-# The component directory and the protocol library share the name mtdx62. Without
-# explicit package bases mypy names the component `mtdx62` as well, and it then
-# shadows the installed library; with it the component is `custom_components.mtdx62`.
-explicit_package_bases = true
 # While the library lives beside the integration in this workspace, mypy reads it
 # from source. Published releases resolve it from site-packages instead.
-mypy_path = "$MYPY_CONFIG_FILE_DIR/../..:$MYPY_CONFIG_FILE_DIR/../../libraries/mtdx62/src"
+mypy_path = "$MYPY_CONFIG_FILE_DIR/../../libraries/mtdx62-modbus-library/src"

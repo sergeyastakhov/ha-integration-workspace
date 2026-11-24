@@ -7,7 +7,7 @@ import sys
 
 from modbus_connection.mock import MockModbusConnection, MockModbusUnit
 
-from mtdx62 import ALL, READINGS, Mtdx62Device, Settings
+from mtdx62_modbus_library import ALL, READINGS, Mtdx62Device, Settings
 
 
 def test_device_exposes_both_subsystems(mock_modbus_unit: MockModbusUnit) -> None:
@@ -50,7 +50,7 @@ async def test_raw_dump_can_be_replayed(mock_modbus_unit: MockModbusUnit) -> Non
 
 def test_import_does_not_pull_home_assistant() -> None:
     """The library stays usable without Home Assistant installed."""
-    code = "import mtdx62, sys; print('homeassistant' in sys.modules)"
+    code = "import mtdx62_modbus_library, sys; print('homeassistant' in sys.modules)"
     result = subprocess.run(
         [sys.executable, "-c", code], capture_output=True, text=True, check=True
     )

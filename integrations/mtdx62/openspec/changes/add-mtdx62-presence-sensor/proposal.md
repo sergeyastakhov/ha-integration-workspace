@@ -10,7 +10,7 @@
 
 Протокол описан производителем полностью (карта регистров, функции, примеры кадров), документация
 собрана в `references/mtdx62/`. Разбор регистров выносится в библиотеку `mtdx62` — отдельное
-изменение в `libraries/mtdx62/openspec/changes/add-mtdx62-device-library`. Здесь описана только
+изменение в `libraries/mtdx62-modbus-library/openspec/changes/add-mtdx62-device-library`. Здесь описана только
 интеграция: связь с Home Assistant, сущности и диагностика.
 
 ## What Changes
@@ -64,7 +64,7 @@
 
 - **Новый репозиторий** `integrations/mtdx62` (custom-компонент `custom_components/mtdx62`,
   отдельный репозиторий GitHub для Marketplace).
-- **Зависимости интеграции**: `mtdx62==0.1.0` — библиотека протокола из изменения
+- **Зависимости интеграции**: `mtdx62-modbus-library==0.3.0` — библиотека протокола из изменения
   `add-mtdx62-device-library`. Транспорт приходит из `modbus-connection` через неё.
 - **Манифест**: `dependencies: ["modbus"]`, `connectivity: ["modbus"]`, `integration_type: device`,
   `iot_class: local_polling`, `loggers`: `mtdx62`, `modbus_connection`, `tmodbus`.

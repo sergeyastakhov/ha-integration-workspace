@@ -22,8 +22,7 @@ from homeassistant.helpers.selector import (
     TextSelector,
 )
 from modbus_connection import ModbusError
-
-from mtdx62 import Mtdx62Device
+from mtdx62_modbus_library import Mtdx62Device
 
 from .const import (
     CONF_BAUDRATE,

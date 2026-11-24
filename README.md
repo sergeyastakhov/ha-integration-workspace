@@ -24,9 +24,9 @@
 
 | Уровень | Что там лежит | Пример |
 |---|---|---|
-| Сквозной (`openspec/specs/conventions/`) | Правила, действующие на любую интеграцию: транспорт Modbus, доступность сущностей, идентичность, диагностика, локализация, упаковка | `conventions/modbus-transport` |
+| Сквозной (`openspec/specs/conventions/`) | Правила, действующие на любую интеграцию: транспорт Modbus, доступность сущностей, идентичность, диагностика, локализация, упаковка, имена модулей | `conventions/modbus-transport` |
 | Интеграция (`integrations/mtdx62/openspec/`) | Мастер настройки, сущности, поведение при недоступности, диагностика этой интеграции | `mtdx62-presence` |
-| Библиотека (`libraries/mtdx62/openspec/`) | Контракт пакета: карта регистров, разбор значений, семантика ошибок | `mtdx62-registers` |
+| Библиотека (`libraries/mtdx62-modbus-library/openspec/`) | Контракт пакета: карта регистров, разбор значений, семантика ошибок | `mtdx62-registers` |
 
 Правило, действующее на несколько интеграций, живёт только в сквозном уровне; интеграции на него
 ссылаются, а не копируют. Разбор протокола — только в библиотеке; интеграция работает с её
@@ -66,16 +66,18 @@ openspec validate add-mtdx62-device-library --strict
 
 ## Текущее состояние
 
-Готовы спецификации, реализация не начата:
+Библиотека протокола готова и проверена, интеграция реализована и ждёт прогона тестов в CI.
 
-- [Библиотека `mtdx62`](<libraries/mtdx62/openspec/changes/add-mtdx62-device-library/proposal.md>) —
-  карта регистров и разбор значений на `modbus-connection`.
-- [Интеграция `mtdx62`](<integrations/mtdx62/openspec/changes/add-mtdx62-presence-sensor/proposal.md>) —
-  мастер настройки, сущности присутствия и окружения, диагностика.
+- Библиотека [`mtdx62-modbus-library`](<libraries/mtdx62-modbus-library/README.md>), импортируется
+  как `mtdx62_modbus_library`: карта регистров и разбор значений на `modbus-connection`,
+  30 тестов на mock-бэкенде, покрытие 100 %.
+- Интеграция `mtdx62` — мастер настройки, сущности присутствия и окружения, диагностика,
+  ремонт при зависшем самоконтроле: [предложение](<integrations/mtdx62/openspec/changes/add-mtdx62-presence-sensor/proposal.md>).
 
 Сквозные правила: [транспорт Modbus](<openspec/specs/conventions/modbus-transport/spec.md>),
 [доступность](<openspec/specs/conventions/entity-availability/spec.md>),
 [идентичность](<openspec/specs/conventions/entity-identity/spec.md>),
 [диагностика](<openspec/specs/conventions/diagnostics/spec.md>),
 [локализация](<openspec/specs/conventions/localization/spec.md>),
-[упаковка](<openspec/specs/conventions/marketplace-packaging/spec.md>).
+[упаковка](<openspec/specs/conventions/marketplace-packaging/spec.md>),
+[имена модулей](<openspec/specs/conventions/module-naming/spec.md>).

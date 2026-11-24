@@ -14,7 +14,7 @@ serial port and has no dependency on Home Assistant.
 ## Install
 
 ```bash
-pip install mtdx62
+pip install mtdx62-modbus-library
 ```
 
 ## Use
@@ -24,7 +24,7 @@ import asyncio
 
 from modbus_connection import ModbusTcpParams
 from modbus_connection.tmodbus import ModbusConnection
-from mtdx62 import Mtdx62Device
+from mtdx62_modbus_library import Mtdx62Device
 
 
 async def main() -> None:

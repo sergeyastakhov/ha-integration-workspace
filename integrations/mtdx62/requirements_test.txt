@@ -1,4 +1,4 @@
-mtdx62==0.2.0
+mtdx62-modbus-library==0.3.0
 pytest-homeassistant-custom-component==0.13.375
 pytest-cov>=6.0
 ruff>=0.9

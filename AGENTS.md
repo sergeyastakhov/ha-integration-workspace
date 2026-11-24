@@ -57,7 +57,8 @@ HomeAssistantDev/
 │   │   ├── entity-identity/
 │   │   ├── diagnostics/
 │   │   ├── localization/
-│   │   └── marketplace-packaging/
+│   │   ├── marketplace-packaging/
+│   │   └── module-naming/
 │   └── changes/                   # предложения изменений к самим сквозным правилам
 ├── integrations/
 │   └── <domain>/                  # отдельный репозиторий → GitHub → Marketplace
@@ -101,6 +102,11 @@ HomeAssistantDev/
   для всех интеграций и библиотек. `integrations/<domain>/openspec/` — требования конкретной
   интеграции. `libraries/<name>/openspec/` — контракт конкретной библиотеки. Команды OpenSpec
   выполняются в каталоге нужного корня: CLI берёт ближайший `openspec/`.
+- **Имя модуля библиотеки не совпадает с доменом интеграции** (`conventions/module-naming`).
+  Библиотека для интеграции `acme` называется, например, `acme-modbus-library` и импортируется
+  как `acme_modbus_library`. Совпадение имён ломает импорт, когда рядом на пути лежит
+  `custom_components/<domain>`, и заставляет `mypy` путать пакеты. Проверка — импорт библиотеки
+  из корня репозитория интеграции в CI.
 - **Что куда писать.** Правило, которое должно действовать на несколько интеграций, живёт в
   `conventions/` и никогда не копируется в интеграции. Разбор протокола, адреса регистров и
   семантика ошибок — в корне библиотеки. Поведение сущностей Home Assistant, мастер настройки,
@@ -361,8 +367,9 @@ Marketplace встроен в HA начиная с 2026.11 и используе
 - **CI** на каждый push и PR:
   - `home-assistant/actions/hassfest`;
   - `hacs/action` с `category: integration`;
-  - ruff, mypy, pytest с покрытием.
-  Обе проверки — hassfest и HACS — должны быть зелёными, иначе в каталог не попасть.
+  - ruff, mypy, pytest с покрытием;
+  - импорт библиотеки протокола из корня репозитория — проверка `conventions/module-naming`.
+  Все проверки должны быть зелёными, иначе в каталог не попасть.
 - **Релизы**: GitHub Release с тегом `vX.Y.Z`, совпадающим с `manifest.json`→`version`.
   Заметки о релизе: изменения, breaking changes, минимальная версия HA. Пре-релизы помечаются
   как pre-release. Опубликованные релизы не переписываются.

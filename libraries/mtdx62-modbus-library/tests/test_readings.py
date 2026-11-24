@@ -6,7 +6,7 @@ import pytest
 from modbus_connection import ModbusTimeoutError
 from modbus_connection.mock import MockModbusUnit
 
-from mtdx62 import DeviceStatus, Mtdx62Device
+from mtdx62_modbus_library import DeviceStatus, Mtdx62Device
 
 
 async def test_reads_all_measurements(mock_modbus_unit: MockModbusUnit) -> None:

@@ -15,8 +15,7 @@ from homeassistant.const import LIGHT_LUX, EntityCategory, UnitOfLength
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.typing import StateType
-
-from mtdx62 import DeviceStatus, Readings
+from mtdx62_modbus_library import DeviceStatus, Readings
 
 from . import Mtdx62ConfigEntry
 from .coordinator import Mtdx62Coordinator

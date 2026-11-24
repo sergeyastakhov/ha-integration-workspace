@@ -1,7 +1,7 @@
 # Tasks
 
-> **Предварительное изменение:** `add-mtdx62-device-library` в `libraries/mtdx62/openspec/` —
-> выполнено и заархивировано, библиотека `mtdx62==0.1.0` опубликована локально.
+> **Предварительное изменение:** `add-mtdx62-device-library` в `libraries/mtdx62-modbus-library/openspec/` —
+> выполнено и заархивировано, библиотека `mtdx62-modbus-library==0.3.0` опубликована локально.
 >
 > **Ограничение рабочего места:** `pytest-homeassistant-custom-component` не работает на Windows —
 > Home Assistant требует POSIX (`fcntl`, `resource`, unix-сокет для цикла событий). Тесты
