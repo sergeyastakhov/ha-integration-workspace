@@ -1,0 +1,40 @@
+# Временные файлы разработки
+.scratch/
+*.log
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+build/
+dist/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+htmlcov/
+.coverage
+.coverage.*
+coverage.xml
+
+# Home Assistant: тестовый экземпляр и артефакты запуска
+config/
+*.db
+*.db-shm
+*.db-wal
+.storage/
+home-assistant.log
+home-assistant_v2.db
+
+# Редакторы и ОС
+.vscode/
+.idea/
+Thumbs.db
+desktop.ini
+.DS_Store
+
+# Локальные секреты
+.env
+secrets.yaml
+*.zip
