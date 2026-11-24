@@ -71,7 +71,8 @@ async def test_diagnostics_redact_the_serial_port(
     diagnostics = await async_get_config_entry_diagnostics(hass, mock_entry)
 
     assert diagnostics["entry"]["device"] == "**REDACTED**"
-    assert TYPE_SERIAL not in str(diagnostics["entry"].get("type", ""))
+    assert diagnostics["entry"]["type"] == TYPE_SERIAL
+    assert "/dev/serial/by-id" not in str(diagnostics)
 
 
 async def test_diagnostics_keep_values_while_entities_hide_them(

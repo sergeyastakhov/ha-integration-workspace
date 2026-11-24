@@ -34,6 +34,13 @@ def entity_id(hass: HomeAssistant, entry: MockConfigEntry, domain: str, key: str
     return found
 
 
+def enable_entity(hass: HomeAssistant, entry: MockConfigEntry, domain: str, key: str) -> str:
+    """Turn on an entity that ships disabled, and return its id."""
+    found = entity_id(hass, entry, domain, key)
+    er.async_get(hass).async_update_entity(found, disabled_by=None)
+    return found
+
+
 async def test_setup_creates_the_entities(
     hass: HomeAssistant, mock_entry: MockConfigEntry, patched_unit: MockModbusUnit
 ) -> None:
@@ -155,7 +162,10 @@ async def test_measurements_are_hidden_without_a_passed_self_test(
         assert state is not None
         assert state.state == STATE_UNAVAILABLE, f"{key} shows a value while {label}"
 
-    status = hass.states.get(entity_id(hass, mock_entry, "sensor", "status"))
+    status_id = enable_entity(hass, mock_entry, "sensor", "status")
+    await hass.config_entries.async_reload(mock_entry.entry_id)
+    await hass.async_block_till_done()
+    status = hass.states.get(status_id)
     assert status is not None
     assert status.state != STATE_UNAVAILABLE
 

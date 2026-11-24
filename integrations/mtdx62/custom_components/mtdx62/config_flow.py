@@ -161,13 +161,26 @@ class Mtdx62ConfigFlow(ConfigFlow, domain=DOMAIN):
             data = {CONF_TYPE: connection_type, **user_input}
             errors = await self._async_check(data)
             if not errors:
-                await self.async_set_unique_id(create_unique_id(data))
-                self._abort_if_unique_id_configured()
+                unique_id = create_unique_id(data)
+                if self._another_entry_owns(unique_id, entry):
+                    return self.async_abort(reason="already_configured")
+                await self.async_set_unique_id(unique_id)
                 return self.async_update_reload_and_abort(
-                    entry, data=data, title=create_title(data)
+                    entry, unique_id=unique_id, data=data, title=create_title(data)
                 )
         return self.async_show_form(
             step_id="reconfigure",
             data_schema=self.add_suggested_values_to_schema(SCHEMAS[connection_type], entry.data),
             errors=errors,
+        )
+
+    def _another_entry_owns(self, unique_id: str, entry: ConfigEntry) -> bool:
+        """Whether a different entry already claims this sensor's identity.
+
+        The helper for uniqueness aborts on the entry being reconfigured as well,
+        which would refuse a form submitted without changes.
+        """
+        return any(
+            other.unique_id == unique_id and other.entry_id != entry.entry_id
+            for other in self._async_current_entries()
         )

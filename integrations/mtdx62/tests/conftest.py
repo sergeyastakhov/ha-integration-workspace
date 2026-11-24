@@ -17,8 +17,6 @@ from custom_components.mtdx62.const import (
     TYPE_TCP,
 )
 
-pytest_plugins = "pytest_homeassistant_custom_component"
-
 
 @pytest.fixture(autouse=True)
 def auto_enable_custom_integrations(enable_custom_integrations: None) -> Generator[None]:
@@ -36,6 +34,12 @@ def entry_data() -> dict[str, object]:
         CONF_UNIT_ID: 1,
         CONF_MODEL: MODEL_MTD062,
     }
+
+
+@pytest.fixture
+def tcp_form(entry_data: dict[str, object]) -> dict[str, object]:
+    """What the user submits on the TCP step: link settings without the transport marker."""
+    return {key: value for key, value in entry_data.items() if key != CONF_TYPE}
 
 
 @pytest.fixture
