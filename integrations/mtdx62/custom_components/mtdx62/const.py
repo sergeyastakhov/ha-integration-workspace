@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from datetime import timedelta
 from typing import Final
 
 DOMAIN: Final = "mtdx62"
@@ -44,6 +45,11 @@ MAX_CONSECUTIVE_FAILURES: Final = 3
 # The sensor reports 1 once its self-test passed. Any other code means it is still
 # booting or broken, and its measurements are not trustworthy.
 HEALTHY_STATUS_CODE: Final = 1
+
+# A self-check that lasts longer than this is not booting any more, it is stuck.
+SELF_CHECK_STUCK_AFTER: Final = timedelta(seconds=60)
+
+ISSUE_SELF_CHECK_STUCK: Final = "self_check_stuck"
 
 # Register spaces exposed by the library that diagnostics dumps in raw form.
 RAW_DIAGNOSTIC_NAMES: Final = ("readings", "settings")

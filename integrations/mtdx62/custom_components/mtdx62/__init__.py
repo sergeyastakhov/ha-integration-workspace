@@ -42,4 +42,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: Mtdx62ConfigEntry) -> bo
 
 async def async_unload_entry(hass: HomeAssistant, entry: Mtdx62ConfigEntry) -> bool:
     """Unload the platforms. The shared connection is not ours to close."""
-    return await hass.config_entries.async_unload_platforms(entry, PLATFORMS)
+    if not await hass.config_entries.async_unload_platforms(entry, PLATFORMS):
+        return False
+    entry.runtime_data.async_clear_repairs()
+    return True

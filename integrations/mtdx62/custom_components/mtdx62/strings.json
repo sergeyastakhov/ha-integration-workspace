@@ -115,5 +115,11 @@
         "name": "Radar version"
       }
     }
+  },
+  "issues": {
+    "self_check_stuck": {
+      "title": "Presence sensor is stuck in self-check",
+      "description": "Sensor {name} has been reporting a self-check in progress for over a minute. Its measurements stay hidden until it reports that it is running. Power-cycle the sensor; if the code does not change, the device is faulty."
+    }
   }
 }
