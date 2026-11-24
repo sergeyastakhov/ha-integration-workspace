@@ -1,0 +1,5 @@
+mtdx62==0.1.0
+pytest-homeassistant-custom-component==0.13.375
+pytest-cov>=6.0
+ruff>=0.9
+mypy>=1.13
