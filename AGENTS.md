@@ -61,7 +61,7 @@ HomeAssistantDev/
 │   │   └── module-naming/
 │   └── changes/                   # предложения изменений к самим сквозным правилам
 ├── integrations/
-│   └── <domain>/                  # отдельный репозиторий → GitHub → Marketplace
+│   └── <domain>/                  # репозиторий ha-<domain> → GitHub → Marketplace
 │       ├── openspec/              # корень требований ЭТОЙ интеграции
 │       │   ├── config.yaml
 │       │   ├── specs/             # действующие требования интеграции

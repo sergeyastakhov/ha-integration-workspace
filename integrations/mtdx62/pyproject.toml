@@ -12,9 +12,9 @@ license = { text = "MIT" }
 authors = [{ name = "Sergey Astakhov", email = "sergeyastakhov@mail.ru" }]
 
 [project.urls]
-Homepage = "https://github.com/sergeyastakhov/mtdx62"
-Repository = "https://github.com/sergeyastakhov/mtdx62"
-Issues = "https://github.com/sergeyastakhov/mtdx62/issues"
+Homepage = "https://github.com/sergeyastakhov/ha-mtdx62"
+Repository = "https://github.com/sergeyastakhov/ha-mtdx62"
+Issues = "https://github.com/sergeyastakhov/ha-mtdx62/issues"
 
 [tool.pytest.ini_options]
 asyncio_mode = "auto"

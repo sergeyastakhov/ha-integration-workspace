@@ -107,4 +107,4 @@ config flow; requirements and design live in `openspec/`.
 Sergey Astakhov — [sergeyastakhov@mail.ru](mailto:sergeyastakhov@mail.ru),
 [github.com/sergeyastakhov](https://github.com/sergeyastakhov).
 
-Source and issues: <https://github.com/sergeyastakhov/mtdx62>. MIT licensed.
+Source and issues: <https://github.com/sergeyastakhov/ha-mtdx62>. MIT licensed.
