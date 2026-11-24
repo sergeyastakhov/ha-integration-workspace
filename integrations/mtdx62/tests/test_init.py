@@ -2,9 +2,6 @@
 
 from __future__ import annotations
 
-from collections.abc import Generator
-from unittest.mock import patch
-
 import pytest
 from homeassistant.config_entries import ConfigEntryState
 from homeassistant.const import STATE_ON, STATE_UNAVAILABLE
@@ -15,15 +12,6 @@ from modbus_connection.mock import MockModbusUnit
 from pytest_homeassistant_custom_component.common import MockConfigEntry
 
 from custom_components.mtdx62.const import DOMAIN, MAX_CONSECUTIVE_FAILURES
-
-SETUP = "custom_components.mtdx62.async_get_unit"
-
-
-@pytest.fixture
-def patched_unit(seed_readings: MockModbusUnit) -> Generator[MockModbusUnit]:
-    """Hand the integration a unit whose registers are already seeded."""
-    with patch(SETUP, return_value=seed_readings):
-        yield seed_readings
 
 
 def entity_id(hass: HomeAssistant, entry: MockConfigEntry, domain: str, key: str) -> str:

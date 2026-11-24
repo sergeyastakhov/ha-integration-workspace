@@ -2,11 +2,8 @@
 
 from __future__ import annotations
 
-from collections.abc import Generator
 from datetime import timedelta
-from unittest.mock import patch
 
-import pytest
 from freezegun.api import FrozenDateTimeFactory
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers import issue_registry as ir
@@ -18,15 +15,6 @@ from custom_components.mtdx62.const import (
     ISSUE_SELF_CHECK_STUCK,
     SELF_CHECK_STUCK_AFTER,
 )
-
-SETUP = "custom_components.mtdx62.async_get_unit"
-
-
-@pytest.fixture
-def patched_unit(seed_readings: MockModbusUnit) -> Generator[MockModbusUnit]:
-    """Hand the integration a unit whose registers are already seeded."""
-    with patch(SETUP, return_value=seed_readings):
-        yield seed_readings
 
 
 def self_check_repairs(hass: HomeAssistant) -> list[ir.IssueEntry]:

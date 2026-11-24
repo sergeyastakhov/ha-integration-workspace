@@ -2,10 +2,6 @@
 
 from __future__ import annotations
 
-from collections.abc import Generator
-from unittest.mock import patch
-
-import pytest
 from homeassistant.core import HomeAssistant
 from modbus_connection import ModbusTimeoutError
 from modbus_connection.mock import MockModbusUnit
@@ -16,15 +12,6 @@ from custom_components.mtdx62.diagnostics import (
     async_get_config_entry_diagnostics,
     async_get_device_diagnostics,
 )
-
-SETUP = "custom_components.mtdx62.async_get_unit"
-
-
-@pytest.fixture
-def patched_unit(seed_readings: MockModbusUnit) -> Generator[MockModbusUnit]:
-    """Hand the integration a unit whose registers are already seeded."""
-    with patch(SETUP, return_value=seed_readings):
-        yield seed_readings
 
 
 async def test_diagnostics_report_the_device(

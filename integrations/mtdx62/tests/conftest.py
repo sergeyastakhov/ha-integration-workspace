@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from collections.abc import Generator
+from unittest.mock import patch
 
 import pytest
 from modbus_connection.mock import MockModbusUnit
@@ -66,3 +67,18 @@ def seed_readings(mock_unit: MockModbusUnit) -> MockModbusUnit:
     """Put a person in the room at 2.5 metres in dim light, sensor self-test passed."""
     mock_unit.input[0] = [1, 42, 250, 1, 0x0001, 0x0203, 0x0000, 0x0102]
     return mock_unit
+
+
+SETUP = "custom_components.mtdx62.async_get_unit"
+
+
+@pytest.fixture(autouse=True)
+def patched_unit(seed_readings: MockModbusUnit) -> Generator[MockModbusUnit]:
+    """Hand the integration a unit whose registers are already seeded.
+
+    Autouse: any test that creates an entry lets Home Assistant set it up, and
+    without the mock the integration asks the modbus component for a real unit,
+    which opens a socket that the test harness blocks on purpose.
+    """
+    with patch(SETUP, return_value=seed_readings):
+        yield seed_readings
