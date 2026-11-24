@@ -9,7 +9,7 @@ description = "Device library for the MTD062-MB and MTD262-MB Modbus presence se
 readme = "README.md"
 requires-python = ">=3.14"
 license = { text = "MIT" }
-authors = [{ name = "HomeAssistantDev" }]
+authors = [{ name = "Sergey Astakhov", email = "sergeyastakhov@mail.ru" }]
 keywords = ["modbus", "presence sensor", "radar", "home assistant"]
 classifiers = [
   "Development Status :: 3 - Alpha",
@@ -28,6 +28,12 @@ test = [
   "mypy>=1.13",
   "ruff>=0.9",
 ]
+
+[project.urls]
+Homepage = "https://github.com/sergeyastakhov/mtdx62-modbus-library"
+Repository = "https://github.com/sergeyastakhov/mtdx62-modbus-library"
+Issues = "https://github.com/sergeyastakhov/mtdx62-modbus-library/issues"
+Changelog = "https://github.com/sergeyastakhov/mtdx62-modbus-library/releases"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/mtdx62_modbus_library"]

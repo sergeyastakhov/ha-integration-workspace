@@ -101,3 +101,10 @@ The protocol lives in a separate package, [`mtdx62-modbus-library`](https://pypi
 imported as `mtdx62_modbus_library`, built on
 Home Assistant's `modbus-connection`. The integration only wires that package to entities and the
 config flow; requirements and design live in `openspec/`.
+
+## Author
+
+Sergey Astakhov — [sergeyastakhov@mail.ru](mailto:sergeyastakhov@mail.ru),
+[github.com/sergeyastakhov](https://github.com/sergeyastakhov).
+
+Source and issues: <https://github.com/sergeyastakhov/mtdx62>. MIT licensed.

@@ -1,32 +1,17 @@
 {
   "domain": "mtdx62",
   "name": "MTDx62 Presence Sensor",
-  "codeowners": [
-    "@homeassistantdev"
-  ],
+  "codeowners": ["@sergeyastakhov"],
   "config_flow": true,
-  "connectivity": [
-    "modbus"
-  ],
-  "dependencies": [
-    "modbus"
-  ],
-  "documentation": "https://github.com/homeassistantdev/mtdx62",
+  "connectivity": ["modbus"],
+  "dependencies": ["modbus"],
+  "documentation": "https://github.com/sergeyastakhov/mtdx62",
   "integration_type": "device",
   "iot_class": "local_polling",
-  "issue_tracker": "https://github.com/homeassistantdev/mtdx62/issues",
-  "loggers": [
-    "mtdx62_modbus_library",
-    "modbus_connection",
-    "tmodbus"
-  ],
+  "issue_tracker": "https://github.com/sergeyastakhov/mtdx62/issues",
+  "loggers": ["mtdx62_modbus_library", "modbus_connection", "tmodbus"],
   "quality_scale": "bronze",
-  "requirements": [
-    "mtdx62-modbus-library==0.3.0"
-  ],
+  "requirements": ["mtdx62-modbus-library==0.3.0"],
   "version": "0.1.0",
-  "categories": [
-    "binary_sensor",
-    "sensor"
-  ]
+  "categories": ["binary_sensor", "sensor"]
 }

@@ -104,3 +104,10 @@ nor Home Assistant:
 pip install -e ".[test]"
 pytest
 ```
+
+## Author
+
+Sergey Astakhov — [sergeyastakhov@mail.ru](mailto:sergeyastakhov@mail.ru),
+[github.com/sergeyastakhov](https://github.com/sergeyastakhov).
+
+Source and issues: <https://github.com/sergeyastakhov/mtdx62-modbus-library>. MIT licensed.

@@ -6,8 +6,15 @@ build-backend = "hatchling.build"
 name = "mtdx62-integration"
 version = "0.1.0"
 description = "Home Assistant integration for the MTD062-MB and MTD262-MB presence sensors"
+readme = "README.md"
 requires-python = ">=3.14"
 license = { text = "MIT" }
+authors = [{ name = "Sergey Astakhov", email = "sergeyastakhov@mail.ru" }]
+
+[project.urls]
+Homepage = "https://github.com/sergeyastakhov/mtdx62"
+Repository = "https://github.com/sergeyastakhov/mtdx62"
+Issues = "https://github.com/sergeyastakhov/mtdx62/issues"
 
 [tool.pytest.ini_options]
 asyncio_mode = "auto"
