@@ -41,6 +41,10 @@ SCAN_INTERVAL: Final = 5
 # the device is gone.
 MAX_CONSECUTIVE_FAILURES: Final = 3
 
+# The sensor reports 1 once its self-test passed. Any other code means it is still
+# booting or broken, and its measurements are not trustworthy.
+HEALTHY_STATUS_CODE: Final = 1
+
 # Register spaces exposed by the library that diagnostics dumps in raw form.
 RAW_DIAGNOSTIC_NAMES: Final = ("readings", "settings")
 

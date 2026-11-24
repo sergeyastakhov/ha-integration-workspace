@@ -5,7 +5,7 @@ from __future__ import annotations
 from homeassistant.helpers.device_registry import DeviceInfo
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
-from .const import CONF_MODEL, DOMAIN, MANUFACTURER, MODELS
+from .const import CONF_MODEL, DOMAIN, HEALTHY_STATUS_CODE, MANUFACTURER, MODELS
 from .coordinator import Mtdx62Coordinator
 
 
@@ -30,3 +30,13 @@ class Mtdx62Entity(CoordinatorEntity[Mtdx62Coordinator]):
             name=entry.title,
             sw_version=coordinator.device.readings.app_version,
         )
+
+    @property
+    def measurements_trusted(self) -> bool:
+        """Whether the sensor vouches for its own readings.
+
+        The sensor reports 1 once its self-test passed; anything else means it is
+        still booting or broken, and its measurements and presence flag cannot be
+        trusted. Diagnostic entities ignore this: they are how the user sees why.
+        """
+        return self.coordinator.data.status_code == HEALTHY_STATUS_CODE

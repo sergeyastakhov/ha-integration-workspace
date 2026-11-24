@@ -60,6 +60,8 @@ class Mtdx62SensorDescription(SensorEntityDescription):
     """A sensor of the device, reading one attribute of the library's model."""
 
     value_fn: Callable[[Readings], StateType]
+    trust_required: bool = False
+    """Hide the value unless the sensor reports a passed self-test."""
 
 
 SENSORS: tuple[Mtdx62SensorDescription, ...] = (
@@ -69,6 +71,7 @@ SENSORS: tuple[Mtdx62SensorDescription, ...] = (
         device_class=SensorDeviceClass.ILLUMINANCE,
         native_unit_of_measurement=LIGHT_LUX,
         state_class=SensorStateClass.MEASUREMENT,
+        trust_required=True,
         value_fn=lambda readings: readings.illuminance,
     ),
     Mtdx62SensorDescription(
@@ -77,6 +80,7 @@ SENSORS: tuple[Mtdx62SensorDescription, ...] = (
         device_class=SensorDeviceClass.DISTANCE,
         native_unit_of_measurement=UnitOfLength.CENTIMETERS,
         entity_registry_enabled_default=False,
+        trust_required=True,
         value_fn=_distance_cm,
     ),
     Mtdx62SensorDescription(
@@ -127,6 +131,13 @@ class Mtdx62Sensor(Mtdx62Entity, SensorEntity):
         """Create the sensor from its description."""
         super().__init__(coordinator, description.key)
         self.entity_description = description
+
+    @property
+    def available(self) -> bool:
+        """Measurements are hidden unless the sensor vouches for them."""
+        if self.entity_description.trust_required and not self.measurements_trusted:
+            return False
+        return super().available
 
     @property
     def native_value(self) -> StateType:

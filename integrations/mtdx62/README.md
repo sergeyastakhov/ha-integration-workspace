@@ -48,9 +48,12 @@ port 502.
 | Application version | firmware of the sensor | diagnostic, disabled by default |
 | Radar version | firmware of the radar module | diagnostic, disabled by default |
 
-The state is what the sensor reports: there is no extra filtering or debounce in Home Assistant.
-The entry delay, departure delay and sensitivity of the sensor itself decide how quickly
-presence clears.
+Presence, illuminance and distance are shown only while the sensor reports that it is running
+(health code 1, self-test passed). During power-up and after a self-test failure they go
+unavailable instead of showing numbers nobody should trust; the device status entity and
+diagnostics keep working, so the reason is visible. The state is what the sensor reports: there is
+no extra filtering or debounce in Home Assistant. The entry delay, departure delay and sensitivity
+of the sensor itself decide how quickly presence clears.
 
 ## How data is updated
 

@@ -74,6 +74,24 @@ async def test_diagnostics_redact_the_serial_port(
     assert TYPE_SERIAL not in str(diagnostics["entry"].get("type", ""))
 
 
+async def test_diagnostics_keep_values_while_entities_hide_them(
+    hass: HomeAssistant, mock_entry: MockConfigEntry, patched_unit: MockModbusUnit
+) -> None:
+    """An untrusted measurement is hidden in the UI but still useful in the dump."""
+    patched_unit.input[3] = 4
+    mock_entry.add_to_hass(hass)
+    await hass.config_entries.async_setup(mock_entry.entry_id)
+    await hass.async_block_till_done()
+
+    diagnostics = await async_get_config_entry_diagnostics(hass, mock_entry)
+
+    assert diagnostics["device"]["presence"] is True
+    assert diagnostics["device"]["illuminance"] == 42
+    assert diagnostics["device"]["status_code"] == 4
+    assert diagnostics["device"]["status"] == "RADAR_FAULT"
+    assert diagnostics["raw_registers"]["input"][0] == 1
+
+
 async def test_diagnostics_survive_a_silent_sensor(
     hass: HomeAssistant, mock_entry: MockConfigEntry, patched_unit: MockModbusUnit
 ) -> None:

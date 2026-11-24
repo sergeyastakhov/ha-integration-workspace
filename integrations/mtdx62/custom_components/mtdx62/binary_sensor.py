@@ -35,6 +35,11 @@ class Mtdx62PresenceSensor(Mtdx62Entity, BinarySensorEntity):
         super().__init__(coordinator, "presence")
 
     @property
+    def available(self) -> bool:
+        """Hide the presence flag while the sensor does not vouch for it."""
+        return super().available and self.measurements_trusted
+
+    @property
     def is_on(self) -> bool | None:
         """Return the state the sensor reported, without any local filtering."""
         presence = self.coordinator.data.presence

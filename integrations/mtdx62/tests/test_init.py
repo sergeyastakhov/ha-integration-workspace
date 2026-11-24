@@ -127,3 +127,52 @@ async def test_silent_sensor_at_startup_retries_later(
     await hass.async_block_till_done()
 
     assert mock_entry.state is ConfigEntryState.SETUP_RETRY
+
+
+@pytest.mark.parametrize(
+    ("status_code", "label"),
+    [
+        pytest.param(0, "self-check", id="self-check"),
+        pytest.param(2, "self-test-failed", id="self-test-failed"),
+        pytest.param(4, "radar-fault", id="radar-fault"),
+    ],
+)
+async def test_measurements_are_hidden_without_a_passed_self_test(
+    hass: HomeAssistant,
+    mock_entry: MockConfigEntry,
+    patched_unit: MockModbusUnit,
+    status_code: int,
+    label: str,
+) -> None:
+    """Readings count only while the sensor reports that it is running."""
+    patched_unit.input[3] = status_code
+    mock_entry.add_to_hass(hass)
+    await hass.config_entries.async_setup(mock_entry.entry_id)
+    await hass.async_block_till_done()
+
+    for domain, key in (("binary_sensor", "presence"), ("sensor", "illuminance")):
+        state = hass.states.get(entity_id(hass, mock_entry, domain, key))
+        assert state is not None
+        assert state.state == STATE_UNAVAILABLE, f"{key} shows a value while {label}"
+
+    status = hass.states.get(entity_id(hass, mock_entry, "sensor", "status"))
+    assert status is not None
+    assert status.state != STATE_UNAVAILABLE
+
+
+async def test_measurements_return_once_the_self_test_passes(
+    hass: HomeAssistant, mock_entry: MockConfigEntry, patched_unit: MockModbusUnit
+) -> None:
+    """A sensor that finishes its self-check becomes visible again."""
+    patched_unit.input[3] = 0
+    mock_entry.add_to_hass(hass)
+    await hass.config_entries.async_setup(mock_entry.entry_id)
+    await hass.async_block_till_done()
+    presence_id = entity_id(hass, mock_entry, "binary_sensor", "presence")
+    assert hass.states.get(presence_id).state == STATE_UNAVAILABLE
+
+    patched_unit.input[3] = 1
+    await mock_entry.runtime_data.async_refresh()
+    await hass.async_block_till_done()
+
+    assert hass.states.get(presence_id).state == STATE_ON
