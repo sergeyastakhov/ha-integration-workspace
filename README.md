@@ -66,13 +66,18 @@ openspec validate add-mtdx62-device-library --strict
 
 ## Текущее состояние
 
-Библиотека протокола готова и проверена, интеграция реализована и ждёт прогона тестов в CI.
+Обе части опубликованы и проверены на GitHub.
 
-- Библиотека [`mtdx62-modbus-library`](<libraries/mtdx62-modbus-library/README.md>), импортируется
-  как `mtdx62_modbus_library`: карта регистров и разбор значений на `modbus-connection`,
-  30 тестов на mock-бэкенде, покрытие 100 %.
+- Библиотека [`mtdx62-modbus-library`](<libraries/mtdx62-modbus-library/README.md>) на PyPI,
+  импортируется как `mtdx62_modbus_library`: карта регистров и разбор значений на
+  `modbus-connection`, 30 тестов, покрытие 100 %. Репозиторий
+  [sergeyastakhov/mtdx62-modbus-library](https://github.com/sergeyastakhov/mtdx62-modbus-library),
+  CI зелёный, релиз `v0.3.0` собран и загружен через trusted publishing.
 - Интеграция `mtdx62` — мастер настройки, сущности присутствия и окружения, диагностика,
-  ремонт при зависшем самоконтроле: [предложение](<integrations/mtdx62/openspec/changes/add-mtdx62-presence-sensor/proposal.md>).
+  ремонт при зависшем самоконтроле. Репозиторий
+  [sergeyastakhov/ha-mtdx62](https://github.com/sergeyastakhov/ha-mtdx62), 32 теста,
+  покрытие 99 %, config flow 100 %; hassfest, HACS action и прогон тестов на Ubuntu зелёные.
+  Требования: `openspec/specs/` интеграции (4 возможности, 28 требований).
 
 Сквозные правила: [транспорт Modbus](<openspec/specs/conventions/modbus-transport/spec.md>),
 [доступность](<openspec/specs/conventions/entity-availability/spec.md>),

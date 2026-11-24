@@ -44,7 +44,7 @@
 - [x] 3.4 Подготовить публикационные файлы: `brand/` (иконка и логотип — заглушка, подлежит замене на фирменную), README с моделями, установкой, параметрами, известными ограничениями и удалением, `quality_scale.yaml` со статусами правил Bronze и Silver [infra]
 - [x] 3.5 Подключить CI: hassfest, HACS action с `category: integration`, ruff, mypy, pytest с покрытием [infra]
 - [x] 3.6 Тесты диагностики: снимок выгрузки, проверка вырезания пути к порту и кода MAC, выгрузка при молчащем датчике [spec:mtdx62-device-health#Выгрузка диагностики]
-- [ ] 3.7 Прогнать качественный шлюз целиком: `ruff`, `mypy --strict`, `pytest` с покрытием, hassfest, HACS action; сверить `quality_scale.yaml` с фактическим состоянием — ruff, mypy и 32 теста с покрытием 99 % пройдены; hassfest и HACS action ждут зелёного прогона на GitHub [infra]
+- [x] 3.7 Прогнать качественный шлюз целиком: `ruff`, `mypy --strict`, `pytest` с покрытием, hassfest, HACS action; сверить `quality_scale.yaml` с фактическим состоянием — прогон 45491025278 на GitHub: hassfest success, HACS action success, lint/typing/tests success; 32 теста, покрытие 99 %, config flow 100 % [infra]
 
 - [x] 4.1 Первый прогон в CI: тесты интеграции на Ubuntu, `pytest_plugins` в корневом
   `conftest.py`, отсортированный манифест, категории `presence_location` и `sensors`, темы
