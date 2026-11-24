@@ -37,11 +37,22 @@ HUNDREDTHS_SCALE = 0.01
 
 
 class DeviceStatus(IntEnum):
-    """Self-reported health of the sensor, from input register ``0x0003``."""
+    """Self-reported health of the sensor, from input register ``0x0003``.
 
-    OK = 0
-    SELF_TEST_FAILED = 1
+    A running sensor reports ``OK``. ``SELF_CHECK_IN_PROGRESS`` is the transient
+    state during power-up, and anything from ``SELF_TEST_FAILED`` upwards is a
+    fault the sensor will not clear on its own.
+    """
+
+    SELF_CHECK_IN_PROGRESS = 0
+    OK = 1
+    SELF_TEST_FAILED = 2
     OTHER_FAULT = 3
     RADAR_FAULT = 4
     RS485_FAULT = 5
     RADAR_AND_RS485_FAULT = 6
+
+    @property
+    def is_fault(self) -> bool:
+        """Whether the code means the sensor is broken rather than booting or fine."""
+        return self.value >= DeviceStatus.SELF_TEST_FAILED

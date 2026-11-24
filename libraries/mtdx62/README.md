@@ -52,8 +52,7 @@ asyncio.run(main())
 | `readings.illuminance` | ambient light as the sensor sees it | lx |
 | `readings.distance` | distance to the detected target | m, centimetre resolution |
 | `readings.status_code` | raw health code | — |
-| `readings.status` | health code as `DeviceStatus`, `None` when unknown | — |
-| `readings.app_version` | application firmware version, `1.2.3` | — |
+| `readings.status` | health code as `DeviceStatus`, `None` when unknown | — || `readings.app_version` | application firmware version, `1.2.3` | — |
 | `readings.radar_version` | radar module firmware version | — |
 | `settings.*` | detection range, delays, sensitivities, bus address and speed | see `Settings` |
 
@@ -62,6 +61,27 @@ Every attribute is `None` until the first read of its sub-system.
 The library only reads: no field is writable, and the sensor's configuration is not changed by
 it. Reading the configuration is a separate call (`async_update_settings()`) precisely so that a
 5-second poll costs one request.
+
+## Health codes
+
+`readings.status` is a `DeviceStatus` member. A running sensor reports `OK` (1); code 0 is the
+transient self-check at power-up, and code 2 and above mean the sensor is broken. `is_fault`
+tells the two groups apart, so consumers do not have to remember the boundary.
+
+| Code | Meaning | `is_fault` |
+|---|---|---|
+| 0 | self-check in progress | no |
+| 1 | running | no |
+| 2 | self-test failed | yes |
+| 3 | other fault | yes |
+| 4 | radar module fault | yes |
+| 5 | RS485 fault | yes |
+| 6 | radar and RS485 fault | yes |
+
+An undocumented code decodes to `None`, while `status_code` keeps the raw number for diagnostics.
+
+> **0.2.0 is a breaking release**: `OK` and `SELF_TEST_FAILED` swapped values, because 0.1.0 read
+> the vendor table one row off.
 
 ## Errors
 

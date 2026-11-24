@@ -25,6 +25,7 @@ from .entity import Mtdx62Entity
 PARALLEL_UPDATES = 0
 
 STATUS_KEYS: dict[DeviceStatus, str] = {
+    DeviceStatus.SELF_CHECK_IN_PROGRESS: "self_check_in_progress",
     DeviceStatus.OK: "ok",
     DeviceStatus.SELF_TEST_FAILED: "self_test_failed",
     DeviceStatus.OTHER_FAULT: "other_fault",

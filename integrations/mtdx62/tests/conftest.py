@@ -59,6 +59,6 @@ def mock_unit() -> MockModbusUnit:
 
 @pytest.fixture
 def seed_readings(mock_unit: MockModbusUnit) -> MockModbusUnit:
-    """Put a person in the room at 2.5 metres in dim light."""
-    mock_unit.input[0] = [1, 42, 250, 0, 0x0001, 0x0203, 0x0000, 0x0102]
+    """Put a person in the room at 2.5 metres in dim light, sensor self-test passed."""
+    mock_unit.input[0] = [1, 42, 250, 1, 0x0001, 0x0203, 0x0000, 0x0102]
     return mock_unit

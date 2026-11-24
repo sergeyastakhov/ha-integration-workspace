@@ -68,15 +68,20 @@ class Mtdx62Coordinator(DataUpdateCoordinator[Readings]):
             self._unavailable_logged = True
 
     def _log_fault(self) -> None:
-        """Report a health code once when it appears and once when it clears."""
-        code = self.device.readings.status_code
-        if code in (None, 0):
+        """Report a health code once when it appears and once when it clears.
+
+        A running sensor reports 1; 0 is the transient self-check at power-up.
+        Neither is a fault, so only codes from 2 upwards reach the log.
+        """
+        status = self.device.readings.status
+        if status is None or not status.is_fault:
             if self._reported_fault is not None:
                 _LOGGER.info("%s: health code back to normal", self.name)
                 self._reported_fault = None
             return
+        code = status.value
         if code != self._reported_fault:
-            _LOGGER.warning("%s: sensor reports health code %s", self.name, code)
+            _LOGGER.warning("%s: sensor reports health code %s (%s)", self.name, code, status.name)
             self._reported_fault = code
 
 

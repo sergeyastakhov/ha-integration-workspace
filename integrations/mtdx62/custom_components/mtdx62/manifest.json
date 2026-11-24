@@ -11,7 +11,7 @@
   "issue_tracker": "https://github.com/homeassistantdev/mtdx62/issues",
   "loggers": ["mtdx62", "modbus_connection", "tmodbus"],
   "quality_scale": "bronze",
-  "requirements": ["mtdx62==0.1.0"],
+  "requirements": ["mtdx62==0.2.0"],
   "version": "0.1.0",
   "categories": ["binary_sensor", "sensor"]
 }

@@ -15,6 +15,7 @@
       "status": {
         "default": "mdi:stethoscope",
         "state": {
+          "self_check_in_progress": "mdi:timer-sand",
           "ok": "mdi:check-circle-outline",
           "self_test_failed": "mdi:alert-circle-outline",
           "other_fault": "mdi:alert",

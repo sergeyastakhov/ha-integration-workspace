@@ -98,7 +98,8 @@
       "status": {
         "name": "Device status",
         "state": {
-          "ok": "Healthy",
+          "self_check_in_progress": "Self-check in progress",
+          "ok": "Running",
           "self_test_failed": "Self-test failed",
           "other_fault": "Other fault",
           "radar_fault": "Radar module fault",

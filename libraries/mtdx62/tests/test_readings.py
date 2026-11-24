@@ -11,7 +11,7 @@ from mtdx62 import DeviceStatus, Mtdx62Device
 
 async def test_reads_all_measurements(mock_modbus_unit: MockModbusUnit) -> None:
     """One read yields presence, illuminance, distance, health and both versions."""
-    mock_modbus_unit.input[0] = [1, 42, 250, 0, 0x0001, 0x0203, 0x0000, 0x0102]
+    mock_modbus_unit.input[0] = [1, 42, 250, 1, 0x0001, 0x0203, 0x0000, 0x0102]
 
     device = Mtdx62Device(mock_modbus_unit)
     await device.async_update_readings()
@@ -19,7 +19,7 @@ async def test_reads_all_measurements(mock_modbus_unit: MockModbusUnit) -> None:
     assert device.readings.presence is True
     assert device.readings.illuminance == 42
     assert device.readings.distance == 2.5
-    assert device.readings.status_code == 0
+    assert device.readings.status_code == 1
     assert device.readings.status is DeviceStatus.OK
     assert device.readings.app_version == "1.2.3"
     assert device.readings.radar_version == "0.1.2"
@@ -61,8 +61,9 @@ async def test_fractional_distance(mock_modbus_unit: MockModbusUnit) -> None:
 @pytest.mark.parametrize(
     ("code", "expected"),
     [
-        pytest.param(0, DeviceStatus.OK, id="ok"),
-        pytest.param(1, DeviceStatus.SELF_TEST_FAILED, id="self-test"),
+        pytest.param(0, DeviceStatus.SELF_CHECK_IN_PROGRESS, id="self-check"),
+        pytest.param(1, DeviceStatus.OK, id="ok"),
+        pytest.param(2, DeviceStatus.SELF_TEST_FAILED, id="self-test-failed"),
         pytest.param(3, DeviceStatus.OTHER_FAULT, id="other"),
         pytest.param(4, DeviceStatus.RADAR_FAULT, id="radar"),
         pytest.param(5, DeviceStatus.RS485_FAULT, id="rs485"),
@@ -79,6 +80,26 @@ async def test_known_status_codes(
     await device.async_update_readings()
 
     assert device.readings.status is expected
+
+
+@pytest.mark.parametrize(
+    ("code", "is_fault"),
+    [
+        pytest.param(0, False, id="self-check"),
+        pytest.param(1, False, id="ok"),
+        pytest.param(2, True, id="self-test-failed"),
+        pytest.param(6, True, id="both"),
+    ],
+)
+async def test_fault_flag(mock_modbus_unit: MockModbusUnit, code: int, is_fault: bool) -> None:
+    """A running sensor is not faulty; anything from 2 upwards is."""
+    mock_modbus_unit.input[3] = code
+
+    device = Mtdx62Device(mock_modbus_unit)
+    await device.async_update_readings()
+
+    assert device.readings.status is not None
+    assert device.readings.status.is_fault is is_fault
 
 
 async def test_unknown_status_code_is_kept_raw(mock_modbus_unit: MockModbusUnit) -> None:
