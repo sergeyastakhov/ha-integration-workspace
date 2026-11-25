@@ -220,7 +220,10 @@ class Mtdx62ConfigFlow(ConfigFlow, domain=DOMAIN):
                 )
         return self.async_show_form(
             step_id="reconfigure",
-            data_schema=self.add_suggested_values_to_schema(SCHEMAS[connection_type], entry.data),
+            data_schema=self.add_suggested_values_to_schema(
+                SCHEMAS[connection_type],
+                user_input if user_input is not None else entry.data,
+            ),
             errors=errors,
             description_placeholders=placeholders or None,
         )

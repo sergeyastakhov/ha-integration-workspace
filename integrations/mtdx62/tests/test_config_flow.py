@@ -250,6 +250,37 @@ async def test_a_missing_serial_device_says_it_is_missing(
     assert result["description_placeholders"]["link"] == missing
 
 
+async def test_a_failed_reconfigure_keeps_what_the_user_typed(
+    hass: HomeAssistant,
+    validating: AsyncMock,
+    mock_entry: MockConfigEntry,
+    tcp_form: dict[str, Any],
+) -> None:
+    """The reconfigure form keeps the edited address, not the stored one."""
+    mock_entry.add_to_hass(hass)
+
+    with patch(VALIDATE, new_callable=AsyncMock, side_effect=ModbusTimeoutError()):
+        result = await hass.config_entries.flow.async_init(
+            DOMAIN,
+            context={
+                "source": config_entries.SOURCE_RECONFIGURE,
+                "entry_id": mock_entry.entry_id,
+            },
+        )
+        result = await hass.config_entries.flow.async_configure(
+            result["flow_id"], {**tcp_form, CONF_UNIT_ID: 9}
+        )
+
+    assert result["type"] is FlowResultType.FORM
+    assert result["errors"] == {"base": "cannot_connect"}
+    suggested = {
+        marker.schema: marker.description["suggested_value"]
+        for marker in result["data_schema"].schema
+        if getattr(marker, "description", None)
+    }
+    assert suggested[CONF_UNIT_ID] == 9
+
+
 async def test_adding_the_same_sensor_twice_aborts(
     hass: HomeAssistant,
     validating: AsyncMock,
