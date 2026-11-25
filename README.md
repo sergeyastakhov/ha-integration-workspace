@@ -1,5 +1,7 @@
 # HomeAssistantDev
 
+[![ci](https://github.com/sergeyastakhov/ha-integration-workspace/actions/workflows/ci.yml/badge.svg)](https://github.com/sergeyastakhov/ha-integration-workspace/actions/workflows/ci.yml)
+
 Рабочая область для разработки интеграций устройств для
 [Home Assistant](https://www.home-assistant.io/) и библиотек протоколов к ним.
 
