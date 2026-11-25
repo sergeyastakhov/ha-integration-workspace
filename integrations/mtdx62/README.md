@@ -104,6 +104,13 @@ register values and firmware versions, with the serial port path redacted.
 
 - **"Could not reach the sensor"** — check the address on the bus, the baud rate and parity, and
   that no other program holds the serial port.
+- **"Could not open this connection"** — the port exists but will not open. On a Raspberry Pi the
+  usual cause is a `modbus:` entry in `configuration.yaml` that already owns that UART: a YAML
+  setup keeps the port outside the shared connection registry, so from here it looks free. Remove
+  the sensor from the YAML setup, or point the YAML entry elsewhere, and add it here instead.
+- **"The port is already open as …"** — the same device is reached through two spellings, such as
+  a `/dev/serial/by-id/…` symlink and `/dev/ttyUSB0`. Home Assistant tells connections apart by
+  the path string, so use the name it gives you in both places.
 - **"This sensor is already used with different connection settings"** — the same device is
   already configured with other link settings. Change them in the existing entry instead of
   adding a second one.
