@@ -2,7 +2,7 @@
 
 ## Purpose
 
-TBD - created by archiving change raise-general-rules-from-mtdx62. Update Purpose after archive.
+Правила проверки выпуска на живом Home Assistant: интеграция добавляется через мастер с настоящим устройством, проверяются сущности, диагностика и переконфигурация, а результат записывается в репозиторий интеграции вместе с тем, что проверить не удалось.
 
 ## Requirements
 

@@ -53,6 +53,7 @@ HomeAssistantDev/
 │   ├── config.yaml
 │   ├── specs/conventions/         # правила, общие для всех интеграций и библиотек
 │   │   ├── modbus-transport/
+│   │   ├── modbus-setup/
 │   │   ├── config-flow-errors/
 │   │   ├── live-verification/
 │   │   ├── dependency-and-test-stack/
@@ -184,7 +185,9 @@ HomeAssistantDev/
 мельче одной темы — нет:
 
 1. Подключение и жизненный цикл: config flow, добавление и удаление устройств, reauth,
-   reconfigure, unload, поведение при недоступности.
+   reconfigure, unload, поведение при недоступности. Если устройство работает по протоколу,
+   для которого есть сквозное требование (`conventions/modbus-setup`), здесь остаётся только
+   специфика устройства: модель, заводские параметры обмена, что именно читать для проверки связи.
 2. Сущности: перечень, значения, единицы, доступность. Обычно делится по группам сущностей
    (`<domain>-presence`, `<domain>-environment` и так далее).
 3. Диагностика: состояние устройства, версии, выгрузка диагностики, repair issues.
@@ -218,6 +221,7 @@ actions. Всё, что уже описано в `conventions/`, не перес
 | Вопрос | Где правило |
 |---|---|
 | Кто открывает соединение, кто его закрывает | `conventions/modbus-transport` |
+| Как провести пользователя от «добавить» до работающих сущностей на Modbus | `conventions/modbus-setup` |
 | Как называть порт и что делать с YAML-настройкой `modbus` | `conventions/modbus-transport` |
 | Как выглядит сообщение об ошибке мастера, что делать с введённым | `conventions/config-flow-errors` |
 | Какую версию зависимости требовать и на каком стеке гонять тесты | `conventions/dependency-and-test-stack` |

@@ -2,7 +2,7 @@
 
 ## Purpose
 
-TBD - created by archiving change raise-general-rules-from-mtdx62. Update Purpose after archive.
+Правила зависимостей и тестового стека: границы версий включают исправления, на которые опирается код, интеграция пинует точные версии, а тесты идут на том стеке, который ставит заявленная версия Home Assistant.
 
 ## Requirements
 
