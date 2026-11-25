@@ -30,9 +30,12 @@ map, health codes, what the device does when the bus is cut — live in the
 
 Both models report the same registers, so the model is selected when the device is added.
 
-The same body is also made in a **dry-contact version**: instead of Modbus it closes a relay.
-That version is not supported here — it speaks no protocol at all — and if you need its signal in
-Home Assistant it has to be wired to a binary input or a smart relay.
+The same housing is also made without Modbus: the **MTD061-RC** (5.8 GHz) and **MTD261-RC**
+(24 GHz) switch a dry contact — a relay up to 24 V and 100 mA — and know nothing about Modbus.
+Those are not supported here; their signal goes to a binary input or a smart relay.
+
+Devices that look the same are sold under other names, and Bluetooth variants exist. Only a model
+whose name ends in `-MB` speaks Modbus RTU; check the label on the back before buying.
 
 ## Installation
 

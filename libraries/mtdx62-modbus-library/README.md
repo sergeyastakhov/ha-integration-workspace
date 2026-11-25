@@ -13,9 +13,27 @@ serial port and has no dependency on Home Assistant.
 
 ## The device
 
-Ceiling-mounted radar sensor with a Modbus RTU interface; the same body is sold as the 5.8 GHz
-MTD062-MB and the 24 GHz MTD262-MB. It reports presence, ambient light and the distance to the
-detected target, and keeps its own configuration in holding registers.
+Ceiling-mounted radar sensor. It reports presence, ambient light and the distance to the detected
+target, and keeps its own configuration in holding registers.
+
+### The family
+
+One housing, four models: two speak Modbus, two switch a dry contact. Only the Modbus ones are
+covered by this library, and the register map is identical between them.
+
+| Model | Radio | Interface | Covered here |
+|---|---|---|---|
+| MTD062-MB | 5.8 GHz | Modbus RTU over RS485 | yes |
+| MTD262-MB | 24 GHz | Modbus RTU over RS485 | yes |
+| MTD061-RC | 5.8 GHz | dry contact, ≤ 24 V, ≤ 100 mA | no |
+| MTD261-RC | 24 GHz | dry contact, ≤ 24 V, ≤ 100 mA | no |
+
+Both kinds are configured with the same infrared remote. The manuals for the Modbus and the
+dry-contact series are both in [`docs/sources/`](docs/sources/), so the difference is visible
+before buying the wrong one.
+
+Devices that look the same are also sold under other names, and Bluetooth variants exist. Check
+the label before buying: this library speaks Modbus RTU only.
 
 ### Outside
 
@@ -32,15 +50,8 @@ detected target, and keeps its own configuration in holding registers.
 
 | | |
 |---|---|
-| ![Inside the three versions, angled](docs/images/device-internals-angled.webp) | ![Inside the three versions, front](docs/images/device-internals-front.webp) |
-| *Inside all three versions, angled* | *Inside all three versions, front* |
-
-The same body is made in three versions: two speak Modbus (the 5.8 GHz MTD062-MB and the 24 GHz
-MTD262-MB) and one switches a dry contact instead. Only the Modbus versions are covered by this
-library; the register map is identical between them.
-
-The sensor is configured either over the bus or with an infrared remote, whose manual is in
-[`docs/sources/`](docs/sources/).
+| ![Inside the three hardware versions, angled](docs/images/device-internals-angled.webp) | ![Inside the three hardware versions, front](docs/images/device-internals-front.webp) |
+| *Inside all three hardware versions, angled* | *Inside all three hardware versions, front* |
 
 Pictures come from the vendor's product material. What the device actually does — register
 values, the self-check timeline, how it reacts to a cut bus — is in
