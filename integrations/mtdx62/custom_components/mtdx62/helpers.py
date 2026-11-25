@@ -89,9 +89,10 @@ def serial_port_exists(data: Mapping[str, Any]) -> bool:
 def present_serial_ports() -> list[str]:
     """Serial devices worth naming when a port will not open.
 
-    USB adapters show up under ``/dev/serial/by-id`` with a stable name and as
-    ``ttyUSB*`` or ``ttyACM*``. UARTs on the board itself are listed too, because
-    picking one of those instead of the adapter is a common mistake.
+    A stable name appears under ``/dev/serial/by-id``; the same device is also
+    reachable as ``ttyUSB*``, ``ttyACM*`` or a board UART such as ``ttyAMA*``. All
+    of them are listed, because picking one of the other names of the same port is
+    a common mistake.
     """
     patterns = ("serial/by-id/*", "ttyUSB*", "ttyACM*", "ttyAMA*")
     found: set[str] = set()
