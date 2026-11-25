@@ -1,0 +1,40 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  specs:
+    name: conventions validate
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: install openspec
+        run: npm install --global @fission-ai/openspec
+      - name: validate the shared requirements
+        run: openspec validate --specs
+      - name: every requirement names its scenarios
+        run: |
+          missing=$(grep -rL --include='spec.md' '#### Scenario:' openspec/specs/conventions/*/spec.md || true)
+          if [ -n "$missing" ]; then
+            echo "requirements without scenarios:"
+            echo "$missing"
+            exit 1
+          fi
+
+  tools:
+    name: tools compile
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.14"
+      - run: python -m compileall -q tools
+      - name: publishing tool lists components without touching the network
+        run: python tools/publish.py list

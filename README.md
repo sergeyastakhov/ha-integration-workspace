@@ -1,88 +1,83 @@
 # HomeAssistantDev
 
-Рабочее пространство для разработки интеграций устройств для Home Assistant.
-Правила проекта — в [AGENTS.md](<AGENTS.md>), они обязательны для людей и агентов.
+Рабочая область для разработки интеграций устройств для
+[Home Assistant](https://www.home-assistant.io/) и библиотек протоколов к ним.
 
-## Что здесь есть
+Здесь живут **правила и сквозные требования**, по которым делается любая интеграция. Код самих
+интеграций и библиотек разрабатывается в этой же папке, но публикуется в отдельных репозиториях —
+по одному на компонент, как требует Marketplace.
 
-| Каталог | Назначение |
-|---|---|
-| `AGENTS.md` | Правила: процесс, требования Home Assistant, тестирование, публикация, путь в Core |
-| `openspec/` | Корень **сквозных** требований: `specs/conventions/` — правила, общие для всех интеграций и библиотек |
-| `integrations/<domain>/openspec/` | Корень требований **конкретной интеграции** |
-| `libraries/<name>/openspec/` | Корень требований **конкретной библиотеки** |
-| `references/` | Исходные материалы по устройствам: документация производителя и извлечённые факты |
-| `integrations/` | Код интеграций (custom-компоненты) |
-| `libraries/` | Библиотеки протоколов, публикуемые на PyPI |
-| `.agents/skills/` | Рабочие процессы OpenSpec для агентов |
-| `.scratch/` | Временные файлы разработки, в репозиторий не попадает |
+- Правила проекта: [`AGENTS.md`](AGENTS.md) — обязательны для людей и агентов.
+- Сквозные требования: [`openspec/specs/conventions/`](openspec/specs/conventions/) — 12
+  возможностей, от владения соединением до порядка выпуска.
 
-### Три уровня спецификаций
+## Из чего состоит работа
 
-Требования разделены по зоне ответственности, и это же разделение переживёт вынос кода в
-отдельные репозитории:
-
-| Уровень | Что там лежит | Пример |
+| Часть | Где | Репозиторий |
 |---|---|---|
-| Сквозной (`openspec/specs/conventions/`) | Правила, действующие на любую интеграцию: транспорт Modbus, доступность сущностей, идентичность, диагностика, локализация, упаковка, имена модулей | `conventions/modbus-transport` |
-| Интеграция (`integrations/mtdx62/openspec/`) | Мастер настройки, сущности, поведение при недоступности, диагностика этой интеграции | `mtdx62-presence` |
-| Библиотека (`libraries/mtdx62-modbus-library/openspec/`) | Контракт пакета: карта регистров, разбор значений, семантика ошибок | `mtdx62-registers` |
+| Правила и общие требования | `AGENTS.md`, `openspec/specs/conventions/` | этот |
+| Инструменты разработки | `tools/` | этот |
+| Интеграция `mtdx62` | `integrations/mtdx62/` | [`ha-mtdx62`](https://github.com/sergeyastakhov/ha-mtdx62) |
+| Библиотека MTDx62 | `libraries/mtdx62-modbus-library/` | [`mtdx62-modbus-library`](https://github.com/sergeyastakhov/mtdx62-modbus-library) |
 
-Правило, действующее на несколько интеграций, живёт только в сквозном уровне; интеграции на него
-ссылаются, а не копируют. Разбор протокола — только в библиотеке; интеграция работает с её
-типизированными значениями.
+Папки `integrations/` и `libraries/` в этот репозиторий не входят: они перечислены в `.gitignore`,
+а их содержимое живёт в собственных репозиториях. Скрипт
+[`tools/publish.py`](tools/publish.py) переносит папку рабочей области в её репозиторий.
 
-На время разработки интеграции и библиотеки лежат в этом репозитории рядом со спецификациями.
-Перед публикацией в Marketplace каждая интеграция выносится в отдельный репозиторий GitHub —
-это требование Marketplace («один репозиторий — одна интеграция»); `openspec/` уезжает вместе
-с кодом.
+## Как начать новую интеграцию
 
-## Порядок работы
+1. Прочитайте [`AGENTS.md`](AGENTS.md) — процесс, технические правила, путь к Core.
+2. Проверьте, что домен свободен: его нет в `homeassistant/components/` Core и в каталоге
+   Marketplace. Одна интеграция обслуживает несколько моделей одного производителя или протокола;
+   новая интеграция нужна при другом протоколе или другой экосистеме.
+3. Проверьте, какие сквозные требования уже покрывают ваш случай — особенно
+   [`modbus-setup`](openspec/specs/conventions/modbus-setup/spec.md) и
+   [`modbus-transport`](openspec/specs/conventions/modbus-transport/spec.md). Не переписывайте их
+   у себя: в спецификации интеграции остаётся только специфика устройства.
+4. Если правило нужно новое и оно пригодится другим интеграциям, поднимите его в
+   `openspec/specs/conventions/` отдельным изменением. Частную формулировку из `AGENTS.md` при
+   этом удалите.
+5. Создайте `integrations/<domain>/` со своим корнем `openspec/`: три обязательные темы —
+   подключение, сущности, диагностика. Затем протокол в отдельную библиотеку
+   `libraries/<name>-library/`, а в интеграции останется связка с Home Assistant.
+6. Перед выпуском пройдите проверку на живом Home Assistant по
+   [`live-verification`](openspec/specs/conventions/live-verification/spec.md) и запишите результат
+   в `docs/live-check.md` интеграции.
 
-1. Изменение начинается с предложения в OpenSpec **в корне того уровня, который меняется**:
-   `openspec new change <имя>`, затем `proposal.md`, `specs/`, `design.md`, `tasks.md`.
-2. Предложение проверяется: `openspec validate <имя> --strict`.
-3. Предложение согласуется человеком. Без согласования код не пишется.
-4. Реализация идёт по `tasks.md`, тесты — в тех же группах, что и код.
-5. После проверки изменение архивируется: `openspec archive <имя>`.
+## Как доработать существующую
 
-Правка на границе уровней (меняется контракт библиотеки и поведение интеграции) — это два
-изменения: сначала в корне библиотеки, потом в корне интеграции со ссылкой на первое.
+Папка компонента уже лежит в рабочей области, поэтому работа идёт как обычно: изменение в его
+корне OpenSpec, код, тесты, `quality_scale.yaml`. Публикация — из `tools/`:
 
-```powershell
-openspec list                       # в корне рабочего пространства — сквозные изменения
-cd integrations\mtdx62              # здесь — изменения интеграции
-openspec status --change add-mtdx62-presence-sensor
-openspec validate add-mtdx62-presence-sensor --strict
-cd ..\..\libraries\mtdx62           # здесь — изменения библиотеки
-openspec validate add-mtdx62-device-library --strict
+```bash
+python tools/publish.py list
+python tools/publish.py ha-mtdx62 --message "Explain a port held by a YAML setup"
 ```
 
-## Устройства
+Релиз (тег, заметки, PyPI) выполняют workflow в репозитории компонента.
 
-| Устройство | Протокол | Каталог фактов |
-|---|---|---|
-| MTD062-MB, MTD262-MB — радарные датчики присутствия | Modbus RTU / TCP | [DEVICE-FACTS.md](<libraries/mtdx62-modbus-library/docs/DEVICE-FACTS.md>) |
+## Требования и изменения
 
-## Текущее состояние
+Три корня OpenSpec, три уровня требований:
 
-Обе части опубликованы и проверены на GitHub.
+- `openspec/` — сквозные требования, общие для всех интеграций и библиотек;
+- `integrations/<domain>/openspec/` — требования конкретной интеграции;
+- `libraries/<name>/openspec/` — контракт конкретной библиотеки.
 
-- Библиотека [`mtdx62-modbus-library`](<libraries/mtdx62-modbus-library/README.md>) на PyPI,
-  импортируется как `mtdx62_modbus_library`: карта регистров и разбор значений на
-  `modbus-connection`, 30 тестов, покрытие 100 %. Репозиторий
-  [sergeyastakhov/mtdx62-modbus-library](https://github.com/sergeyastakhov/mtdx62-modbus-library),
-  CI зелёный, релиз `v0.3.0` собран и загружен через trusted publishing.
-- Интеграция `mtdx62` — мастер настройки, сущности присутствия и окружения, диагностика,
-  ремонт при зависшем самоконтроле. Репозиторий
-  [sergeyastakhov/ha-mtdx62](https://github.com/sergeyastakhov/ha-mtdx62), 32 теста,
-  покрытие 99 %, config flow 100 %; hassfest, HACS action и прогон тестов на Ubuntu зелёные.
-  Требования: `openspec/specs/` интеграции (4 возможности, 28 требований).
+Команды выполняются в каталоге нужного корня: CLI берёт ближайший `openspec/`.
 
-Сквозные правила: [транспорт Modbus](<openspec/specs/conventions/modbus-transport/spec.md>),
-[доступность](<openspec/specs/conventions/entity-availability/spec.md>),
-[идентичность](<openspec/specs/conventions/entity-identity/spec.md>),
-[диагностика](<openspec/specs/conventions/diagnostics/spec.md>),
-[локализация](<openspec/specs/conventions/localization/spec.md>),
-[упаковка](<openspec/specs/conventions/marketplace-packaging/spec.md>),
-[имена модулей](<openspec/specs/conventions/module-naming/spec.md>).
+```bash
+openspec list --specs
+openspec validate --specs
+openspec new change "add-something"
+openspec validate "add-something" --strict
+openspec archive "add-something" --yes
+```
+
+Правило, найденное на одном устройстве, живёт сначала в корне интеграции, а когда становится ясно,
+что оно общее, — поднимается в `openspec/specs/conventions/` и из локальных правил удаляется.
+Именно так появились `modbus-setup`, `config-flow-errors` и `live-verification`.
+
+## Лицензия
+
+MIT, см. [`LICENSE`](LICENSE). Код интеграций и библиотек лицензируется в их репозиториях.
