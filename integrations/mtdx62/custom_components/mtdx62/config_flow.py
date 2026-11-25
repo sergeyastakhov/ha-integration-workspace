@@ -46,7 +46,14 @@ from .const import (
     TYPE_SERIAL,
     TYPE_TCP,
 )
-from .helpers import create_modbus_params, create_title, create_unique_id
+from .helpers import (
+    create_link_label,
+    create_modbus_params,
+    create_title,
+    create_unique_id,
+    present_serial_ports,
+    serial_port_exists,
+)
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -134,6 +141,7 @@ class Mtdx62ConfigFlow(ConfigFlow, domain=DOMAIN):
     ) -> ConfigFlowResult:
         """Validate the link with a real read, then create the entry."""
         errors: dict[str, str] = {}
+        data: dict[str, Any] | None = None
         if user_input is not None:
             data = {CONF_TYPE: connection_type, **user_input}
             errors = await self._async_check(data)
@@ -145,6 +153,9 @@ class Mtdx62ConfigFlow(ConfigFlow, domain=DOMAIN):
             step_id=connection_type,
             data_schema=self._form(connection_type, user_input),
             errors=errors,
+            description_placeholders=(
+                {"link": create_link_label(data)} if data is not None else None
+            ),
         )
 
     def _form(self, connection_type: str, user_input: dict[str, Any] | None) -> Schema:
@@ -164,6 +175,11 @@ class Mtdx62ConfigFlow(ConfigFlow, domain=DOMAIN):
             await _async_validate(self.hass, data)
         except ModbusConnectionError as err:
             _LOGGER.debug("cannot open the link %s: %s", create_unique_id(data), err)
+            if not serial_port_exists(data):
+                _LOGGER.debug(
+                    "serial ports present: %s", ", ".join(present_serial_ports()) or "none"
+                )
+                return {"base": "port_missing"}
             return {"base": "cannot_open_link"}
         except ModbusError as err:
             _LOGGER.debug("no answer from %s: %s", create_unique_id(data), err)
