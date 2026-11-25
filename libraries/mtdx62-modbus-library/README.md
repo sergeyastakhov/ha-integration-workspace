@@ -11,6 +11,21 @@ Built on [`modbus-connection`](https://home-assistant-libs.github.io/modbus-conn
 caller owns the connection and hands over a `ModbusUnit`. The library never opens a socket or a
 serial port and has no dependency on Home Assistant.
 
+## The device
+
+Ceiling-mounted radar sensor with a Modbus RTU interface; the same body is sold as the 5.8 GHz
+MTD062-MB and the 24 GHz MTD262-MB. It reports presence, ambient light and the distance to the
+detected target, and keeps its own configuration in holding registers.
+
+| | | |
+|---|---|---|
+| ![Sensor on a white background](docs/images/device-1.webp) | ![Vendor illustration](docs/images/device-2.webp) | ![Vendor illustration](docs/images/device-3.webp) |
+| ![Vendor illustration](docs/images/device-4.webp) | ![Vendor illustration](docs/images/device-5.webp) | ![Vendor illustration](docs/images/device-6.webp) |
+
+Pictures come from the vendor's product material. What the device actually does — register
+values, the self-check timeline, how it reacts to a cut bus — is in
+[`docs/DEVICE-FACTS.md`](docs/DEVICE-FACTS.md).
+
 ## Install
 
 ```bash
