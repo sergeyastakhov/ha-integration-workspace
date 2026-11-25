@@ -53,12 +53,16 @@ HomeAssistantDev/
 │   ├── config.yaml
 │   ├── specs/conventions/         # правила, общие для всех интеграций и библиотек
 │   │   ├── modbus-transport/
+│   │   ├── config-flow-errors/
+│   │   ├── live-verification/
+│   │   ├── dependency-and-test-stack/
 │   │   ├── entity-availability/
 │   │   ├── entity-identity/
 │   │   ├── diagnostics/
 │   │   ├── localization/
 │   │   ├── marketplace-packaging/
-│   │   └── module-naming/
+│   │   ├── module-naming/
+│   │   └── device-documentation/
 │   └── changes/                   # предложения изменений к самим сквозным правилам
 ├── integrations/
 │   └── <domain>/                  # репозиторий ha-<domain> → GitHub → Marketplace
@@ -206,6 +210,30 @@ actions. Всё, что уже описано в `conventions/`, не перес
 задач. Одно изменение, размазанное по двум корням, не пройдёт проверку: `openspec validate`
 видит только свой корень.
 
+### 3.6 Сквозные правила и что из них следует
+
+Общее правило живёт в `openspec/specs/conventions/`. Здесь — карта: где искать ответ на вопрос,
+который возникает на каждой интеграции.
+
+| Вопрос | Где правило |
+|---|---|
+| Кто открывает соединение, кто его закрывает | `conventions/modbus-transport` |
+| Как называть порт и что делать с YAML-настройкой `modbus` | `conventions/modbus-transport` |
+| Как выглядит сообщение об ошибке мастера, что делать с введённым | `conventions/config-flow-errors` |
+| Какую версию зависимости требовать и на каком стеке гонять тесты | `conventions/dependency-and-test-stack` |
+| Что проверять на живом Home Assistant перед выпуском | `conventions/live-verification` |
+| Когда сущность `unavailable`, а когда показывает значение | `conventions/entity-availability` |
+| Как устроены `unique_id` и одна запись на устройство | `conventions/entity-identity` |
+| Что вырезать в диагностике | `conventions/diagnostics` |
+| Где хранятся `strings.json` и переводы, как они сверяются | `conventions/localization` |
+| Что обязательно для каталога Marketplace и заметок релиза | `conventions/marketplace-packaging` |
+| Как назвать модуль библиотеки и репозиторий | `conventions/module-naming` |
+| Где лежит документация устройства | `conventions/device-documentation` |
+
+Появилось наблюдение, которое повторится на других интеграциях, — оно поднимается в
+`conventions/` отдельным изменением, а частная формулировка из локальных правил удаляется.
+
+
 ---
 
 ## 4. Технические правила Home Assistant
@@ -299,7 +327,7 @@ actions. Всё, что уже описано в `conventions/`, не перес
 
 Интеграция устройства **не владеет транспортом**. Транспортом владеет интеграция `modbus` ядра,
 она делит одно соединение между всеми потребителями одинаковых параметров связи и сериализует
-их запросы.
+их запросы. Полные правила — `conventions/modbus-transport`.
 
 - Своё соединение не открываем: ни сокет, ни последовательный порт. В `async_setup_entry`
   берём юнит через `async_get_unit(hass, entry, params, unit_id)`, в мастере настройки
@@ -340,8 +368,9 @@ actions. Всё, что уже описано в `conventions/`, не перес
   Если фикстура нужна только для эффекта — `@pytest.mark.usefixtures`.
 - Каждый `#### Scenario` из спецификации OpenSpec покрыт хотя бы одним тестом.
   В docstring теста или в `tasks.md` указана ссылка на требование.
-- Перед релизом выполняется ручная проверка на реальном устройстве и/или в dev-экземпляре HA
-  (devcontainer или `hass -c config`). Результат записывается в PR.
+- Перед выпуском обязательна проверка на живом Home Assistant по `conventions/live-verification`:
+  мастер настройки, сущности, диагностика, переконфигурация. Зелёные тесты этого не заменяют —
+  тесты проверяют то, что сами и вводят.
 
 ---
 
@@ -379,8 +408,8 @@ Marketplace встроен в HA начиная с 2026.11 и используе
   - импорт библиотеки протокола из корня репозитория — проверка `conventions/module-naming`.
   Все проверки должны быть зелёными, иначе в каталог не попасть.
 - **Релизы**: GitHub Release с тегом `vX.Y.Z`, совпадающим с `manifest.json`→`version`.
-  Заметки о релизе: изменения, breaking changes, минимальная версия HA. Пре-релизы помечаются
-  как pre-release. Опубликованные релизы не переписываются.
+  Заметки о релизе — отдельный файл на тег, только свои изменения; правила и запрет переписывать
+  опубликованное — `conventions/marketplace-packaging`. Пре-релизы помечаются как pre-release.
 - **README** содержит: описание, поддерживаемые устройства и прошивки, кнопку
   «Open in Marketplace», My-link `config_flow_start`, установку, параметры настройки, описание
   обновления данных, примеры автоматизаций, известные ограничения, устранение неполадок, удаление.
@@ -504,5 +533,6 @@ Marketplace встроен в HA начиная с 2026.11 и используе
 - [ ] `translations/en.json`, `ru.json`, `icons.json` обновлены. Нет неиспользуемых ключей.
 - [ ] `quality_scale.yaml` и `manifest.json`→`quality_scale` актуальны.
 - [ ] README и release notes обновлены. Breaking changes описаны отдельно.
-- [ ] Ручная проверка на устройстве или в dev-экземпляре HA зафиксирована.
+- [ ] Проверка на живом Home Assistant выполнена и записана в `docs/live-check.md`
+  (`conventions/live-verification`): мастер настройки, сущности, диагностика, переконфигурация.
 - [ ] Change заархивирован (`/openspec-archive-change`), `openspec/specs/` отражает новое поведение.
