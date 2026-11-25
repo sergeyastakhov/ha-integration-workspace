@@ -7,6 +7,7 @@ from pathlib import Path
 from typing import Any
 
 from homeassistant.const import CONF_DEVICE, CONF_HOST, CONF_PORT
+from homeassistant.core import HomeAssistant
 from modbus_connection import ModbusSerialParams, ModbusTcpParams
 
 from .const import (
@@ -19,6 +20,11 @@ from .const import (
     MODELS,
     TYPE_SERIAL,
 )
+
+# Where the modbus component keeps the connections it shares. Its own config flow
+# would report a clash, but only when the path string matches exactly, so a port
+# reached through two spellings of the same device looks free until the open fails.
+CONNECTIONS_STORE = "modbus_connections"
 
 
 def create_modbus_params(data: Mapping[str, Any]) -> ModbusTcpParams | ModbusSerialParams:
@@ -81,8 +87,46 @@ def present_serial_ports() -> list[str]:
     ``ttyUSB*`` or ``ttyACM*``. UARTs on the board itself are listed too, because
     picking one of those instead of the adapter is a common mistake.
     """
-    patterns = ("/dev/serial/by-id/*", "/dev/ttyUSB*", "/dev/ttyACM*", "/dev/ttyAMA*")
+    patterns = ("serial/by-id/*", "ttyUSB*", "ttyACM*", "ttyAMA*")
     found: set[str] = set()
     for pattern in patterns:
-        found.update(str(path) for path in Path("/dev").glob(pattern.removeprefix("/dev/")))
+        found.update(
+            f"/dev/{path.name}" if "by-id" not in pattern else str(path)
+            for path in Path("/dev").glob(pattern)
+        )
     return sorted(found)
+
+
+def held_serial_links(hass: HomeAssistant) -> list[str]:
+    """Serial devices the modbus component already has a connection for."""
+    connections = hass.data.get(CONNECTIONS_STORE) or {}
+    found = []
+    for key in connections:
+        if isinstance(key, tuple) and len(key) == 2 and key[0] == "serial":
+            found.append(str(key[1]))
+    return sorted(found)
+
+
+def same_device_under_another_path(hass: HomeAssistant, data: Mapping[str, Any]) -> str | None:
+    """A path the modbus component holds for the same device as the one submitted.
+
+    ``/dev/serial/by-id/...`` and ``/dev/ttyUSB0`` are the same port under two
+    names. The modbus component keys connections by the name it was given, so the
+    port looks free here and then fails to open.
+    """
+    if data[CONF_TYPE] != TYPE_SERIAL:
+        return None
+    wanted = Path(str(data[CONF_DEVICE]))
+    try:
+        wanted_device = wanted.resolve()
+    except OSError:
+        return None
+    for held in held_serial_links(hass):
+        if held == str(data[CONF_DEVICE]):
+            continue
+        try:
+            if Path(held).resolve() == wanted_device:
+                return held
+        except OSError:
+            continue
+    return None
