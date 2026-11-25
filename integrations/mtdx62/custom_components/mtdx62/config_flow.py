@@ -51,6 +51,7 @@ from .helpers import (
     create_modbus_params,
     create_title,
     create_unique_id,
+    held_serial_links,
     present_serial_ports,
     same_device_under_another_path,
     serial_port_exists,
@@ -176,6 +177,10 @@ class Mtdx62ConfigFlow(ConfigFlow, domain=DOMAIN):
             await _async_validate(self.hass, data)
         except ModbusConnectionError as err:
             _LOGGER.debug("cannot open the link %s: %s", create_unique_id(data), err)
+            _LOGGER.debug(
+                "serial links the modbus component holds: %s",
+                ", ".join(held_serial_links(self.hass)) or "none",
+            )
             held = same_device_under_another_path(self.hass, data)
             if held is not None:
                 _LOGGER.debug("the same device is already open as %s", held)
