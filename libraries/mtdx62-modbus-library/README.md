@@ -19,8 +19,14 @@ detected target, and keeps its own configuration in holding registers.
 
 | | | |
 |---|---|---|
-| ![Sensor on a white background](docs/images/device-1.webp) | ![Vendor illustration](docs/images/device-2.webp) | ![Vendor illustration](docs/images/device-3.webp) |
-| ![Vendor illustration](docs/images/device-4.webp) | ![Vendor illustration](docs/images/device-5.webp) | ![Vendor illustration](docs/images/device-6.webp) |
+| ![Overview with the infrared remote](docs/images/device-overview.webp) | ![Angled view](docs/images/device-angled.webp) | ![Side view](docs/images/device-side.webp) |
+| *Overview with the infrared remote* | *Angled view* | *Side view* |
+| ![Dimensions](docs/images/device-dimensions.webp) | ![Inside the two versions, angled](docs/images/device-internals-angled.webp) | ![Inside the two versions, front](docs/images/device-internals-front.webp) |
+| *Dimensions, millimetres* | *Inside the two versions, angled* | *Inside the two versions, front* |
+
+The sensor is configured either over the bus or with an infrared remote, whose manual is in
+[`docs/sources/`](docs/sources/). The internals differ between the 5.8 GHz and 24 GHz versions,
+while the register map stays the same — the model is what distinguishes them in a config entry.
 
 Pictures come from the vendor's product material. What the device actually does — register
 values, the self-check timeline, how it reacts to a cut bus — is in

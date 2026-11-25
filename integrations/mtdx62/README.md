@@ -7,17 +7,18 @@ The sensor detects a person by breathing and small movements, not just by motion
 reporting presence for someone sitting still. This integration turns that into an occupancy
 binary sensor, adds illuminance and target distance, and exposes the device's own health.
 
-![Presence sensor on a white background](docs/images/device-1.webp)
+![Overview of the sensor with the infrared remote](docs/images/device-overview.webp)
 
-The sensor is a ceiling-mounted radar unit with an RS485 interface. It reaches Home Assistant
-through Home Assistant's own [Modbus](https://www.home-assistant.io/integrations/modbus/)
-integration: this integration never opens the port itself, so several sensors on one bus, and
-other Modbus devices, share the connection.
+The sensor is a ceiling-mounted radar unit with an RS485 interface, configured over the bus or
+with an infrared remote. It reaches Home Assistant through Home Assistant's own
+[Modbus](https://www.home-assistant.io/integrations/modbus/) integration: this integration never
+opens the port itself, so several sensors on one bus, and other Modbus devices, share the
+connection.
 
-![Vendor illustration](docs/images/device-2.webp)
+![Side view of the sensor](docs/images/device-side.webp)
 
-More pictures and everything about the protocol — register map, health codes, what the device
-does when the bus is cut — live in the
+Dimensions, the internals of both radio versions and everything about the protocol — register
+map, health codes, what the device does when the bus is cut — live in the
 [library repository](https://github.com/sergeyastakhov/mtdx62-modbus-library#the-device).
 
 ## Supported devices
