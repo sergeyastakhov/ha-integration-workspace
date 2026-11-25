@@ -55,6 +55,8 @@ from .helpers import (
     present_serial_ports,
     same_device_under_another_path,
     serial_port_exists,
+    yaml_hub_for,
+    yaml_hubs_using,
 )
 
 _LOGGER = logging.getLogger(__name__)
@@ -181,6 +183,14 @@ class Mtdx62ConfigFlow(ConfigFlow, domain=DOMAIN):
                 "serial links the modbus component holds: %s",
                 ", ".join(held_serial_links(self.hass)) or "none",
             )
+            _LOGGER.debug(
+                "serial ports used by a YAML modbus setup: %s",
+                ", ".join(f"{port} ({name})" for name, port in yaml_hubs_using(self.hass))
+                or "none",
+            )
+            hub = yaml_hub_for(self.hass, data)
+            if hub is not None:
+                return {"base": "port_used_by_yaml_hub"}, {**placeholders, "hub": hub}
             held = same_device_under_another_path(self.hass, data)
             if held is not None:
                 _LOGGER.debug("the same device is already open as %s", held)
