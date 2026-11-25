@@ -65,6 +65,10 @@ def git(cwd: Path, *args: str, secret: str | None = None) -> str:
     """Run git with secrets out of the command line."""
     env = os.environ.copy()
     config: list[tuple[str, str]] = []
+    if os.name == "nt":
+        # The schannel backend on Windows cannot always acquire credentials for a
+        # token sent as a header; the OpenSSL one can.
+        config.append(("http.sslBackend", "openssl"))
     if secret:
         encoded = base64.b64encode(f"x-access-token:{secret}".encode()).decode()
         config.append(("http.extraHeader", f"Authorization: Basic {encoded}"))
