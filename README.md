@@ -62,7 +62,7 @@ openspec validate add-mtdx62-device-library --strict
 
 | Устройство | Протокол | Каталог фактов |
 |---|---|---|
-| MTD062-MB, MTD262-MB — радарные датчики присутствия | Modbus RTU / TCP | [references/mtdx62/DEVICE-FACTS.md](<references/mtdx62/DEVICE-FACTS.md>) |
+| MTD062-MB, MTD262-MB — радарные датчики присутствия | Modbus RTU / TCP | [DEVICE-FACTS.md](<libraries/mtdx62-modbus-library/docs/DEVICE-FACTS.md>) |
 
 ## Текущее состояние
 

@@ -34,6 +34,3 @@ select = ["A", "B", "E", "F", "I", "N", "RUF", "SIM", "UP"]
 python_version = "3.14"
 strict = true
 files = ["custom_components"]
-# While the library lives beside the integration in this workspace, mypy reads it
-# from source. Published releases resolve it from site-packages instead.
-mypy_path = "$MYPY_CONFIG_FILE_DIR/../../libraries/mtdx62-modbus-library/src"
