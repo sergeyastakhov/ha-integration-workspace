@@ -30,6 +30,10 @@ map, health codes, what the device does when the bus is cut — live in the
 
 Both models report the same registers, so the model is selected when the device is added.
 
+The same body is also made in a **dry-contact version**: instead of Modbus it closes a relay.
+That version is not supported here — it speaks no protocol at all — and if you need its signal in
+Home Assistant it has to be wired to a binary input or a smart relay.
+
 ## Installation
 
 The integration is distributed through the [Marketplace](https://www.home-assistant.io/integrations/marketplace):

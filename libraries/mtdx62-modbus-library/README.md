@@ -17,16 +17,30 @@ Ceiling-mounted radar sensor with a Modbus RTU interface; the same body is sold 
 MTD062-MB and the 24 GHz MTD262-MB. It reports presence, ambient light and the distance to the
 detected target, and keeps its own configuration in holding registers.
 
+### Outside
+
 | | | |
 |---|---|---|
 | ![Overview with the infrared remote](docs/images/device-overview.webp) | ![Angled view](docs/images/device-angled.webp) | ![Side view](docs/images/device-side.webp) |
 | *Overview with the infrared remote* | *Angled view* | *Side view* |
-| ![Dimensions](docs/images/device-dimensions.webp) | ![Inside the two versions, angled](docs/images/device-internals-angled.webp) | ![Inside the two versions, front](docs/images/device-internals-front.webp) |
-| *Dimensions, millimetres* | *Inside the two versions, angled* | *Inside the two versions, front* |
+
+![Dimensions](docs/images/device-dimensions.webp)
+
+*Dimensions, millimetres*
+
+### Inside
+
+| | |
+|---|---|
+| ![Inside the three versions, angled](docs/images/device-internals-angled.webp) | ![Inside the three versions, front](docs/images/device-internals-front.webp) |
+| *Inside all three versions, angled* | *Inside all three versions, front* |
+
+The same body is made in three versions: two speak Modbus (the 5.8 GHz MTD062-MB and the 24 GHz
+MTD262-MB) and one switches a dry contact instead. Only the Modbus versions are covered by this
+library; the register map is identical between them.
 
 The sensor is configured either over the bus or with an infrared remote, whose manual is in
-[`docs/sources/`](docs/sources/). The internals differ between the 5.8 GHz and 24 GHz versions,
-while the register map stays the same — the model is what distinguishes them in a config entry.
+[`docs/sources/`](docs/sources/).
 
 Pictures come from the vendor's product material. What the device actually does — register
 values, the self-check timeline, how it reacts to a cut bus — is in
