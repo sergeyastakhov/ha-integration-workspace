@@ -43,8 +43,8 @@
    подключение, сущности, диагностика. Затем протокол в отдельную библиотеку
    `libraries/<name>-library/`, а в интеграции останется связка с Home Assistant.
 6. Перед выпуском пройдите проверку на живом Home Assistant по
-   [`live-verification`](openspec/specs/conventions/live-verification/spec.md) и запишите результат
-   в `docs/live-check.md` интеграции.
+   [`live-verification`](openspec/specs/conventions/live-verification/spec.md): список проверок
+   лежит в `docs/live-check.md` интеграции, а отчёты — в `docs/live-checks/`.
 
 ## Как доработать существующую
 

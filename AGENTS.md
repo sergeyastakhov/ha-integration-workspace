@@ -65,6 +65,7 @@ HomeAssistantDev/
 │   │   ├── diagnostics/
 │   │   ├── localization/
 │   │   ├── marketplace-packaging/
+│   │   ├── pypi-packaging/
 │   │   ├── module-naming/
 │   │   └── device-documentation/
 │   └── changes/                   # предложения изменений к самим сквозным правилам
@@ -238,6 +239,7 @@ actions. Всё, что уже описано в `conventions/`, не перес
 | Что вырезать в диагностике | `conventions/diagnostics` |
 | Где хранятся `strings.json` и переводы, как они сверяются | `conventions/localization` |
 | Что обязательно для каталога Marketplace и заметок релиза | `conventions/marketplace-packaging` |
+| Что должно быть верно для README библиотеки, который PyPI показывает как описание | `conventions/pypi-packaging` |
 | Как назвать модуль библиотеки и репозиторий | `conventions/module-naming` |
 | Где лежит документация устройства | `conventions/device-documentation` |
 
@@ -544,6 +546,7 @@ Marketplace встроен в HA начиная с 2026.11 и используе
 - [ ] `translations/en.json`, `ru.json`, `icons.json` обновлены. Нет неиспользуемых ключей.
 - [ ] `quality_scale.yaml` и `manifest.json`→`quality_scale` актуальны.
 - [ ] README и release notes обновлены. Breaking changes описаны отдельно.
-- [ ] Проверка на живом Home Assistant выполнена и записана в `docs/live-check.md`
-  (`conventions/live-verification`): мастер настройки, сущности, диагностика, переконфигурация.
+- [ ] Проверка на живом Home Assistant пройдена по чек-листу `docs/live-check.md`, а результат
+  записан отчётом в `docs/live-checks/` (`conventions/live-verification`): мастер настройки,
+  сущности, диагностика, переконфигурация.
 - [ ] Change заархивирован (`/openspec-archive-change`), `openspec/specs/` отражает новое поведение.
