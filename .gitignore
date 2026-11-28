@@ -8,6 +8,7 @@ libraries/*
 # Временные файлы разработки
 .scratch/
 *.log
+todo
 
 # Python
 __pycache__/
